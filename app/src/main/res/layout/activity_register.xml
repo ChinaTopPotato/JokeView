@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/r_account"
+        android:textSize="18sp"
+        android:hint="在这输入您的账号"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/r_password"
+        android:textSize="18sp"
+        android:hint="在这输入您的密码"
+        android:inputType="textPassword"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/r_age"
+        android:textSize="18sp"
+        android:digits="1234567890"
+        android:inputType="number"
+        android:hint="在这输入您的年龄"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/register"
+        android:text="注册"/>
+</LinearLayout>
