@@ -17,7 +17,6 @@ public class LoginActivity extends BaseActivity {
     private EditText passwordEdit;
     private Button login;
     private Button register;
- 
     @Override
     protected void onResume() {
         super.onResume();
