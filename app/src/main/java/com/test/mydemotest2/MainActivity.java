@@ -59,8 +59,8 @@ public class MainActivity extends BaseActivity{
         sendRequestWithOkhttp();
         Intent intent = getIntent();
         user = (User)intent.getSerializableExtra("userinfo");
-        userText.setText("用户名："+user.getAccount());
-        ageText.setText("年龄："+String.valueOf(user.getAge()));
+        userText.setText(String.format(getResources().getString(R.string.show_username),user.getAccount()));
+        ageText.setText(String.format(getResources().getString(R.string.show_age),user.getAge()));
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {

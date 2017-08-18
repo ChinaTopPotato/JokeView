@@ -4,4 +4,6 @@
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="show_username">用户名：%1$s</string>
+    <string name="show_age">年龄：%1$d</string>
 </resources>
