@@ -1,9 +1,14 @@
 <resources>
-    <string name="app_name">MyDemoTest2</string>
+    <string name="app_name">滑稽</string>
 
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="show_username">用户名：%1$s</string>
     <string name="show_age">年龄：%1$d</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="username_hint">在这输入您的账号</string>
+    <string name="password_hint">在这输入您的密码</string>
+    <string name="age_hint">在这输入您的年龄</string>
 </resources>

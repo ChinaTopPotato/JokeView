@@ -50,7 +50,7 @@ public class LoginActivity extends BaseActivity {
                         judge = true;
                    }
                }
-              if(judge = false) Toast.makeText(LoginActivity.this,"账号或密码错误",Toast.LENGTH_SHORT).show();
+              if(!judge) Toast.makeText(LoginActivity.this,"账号或密码错误",Toast.LENGTH_SHORT).show();
             }
         });
         register.setOnClickListener(new View.OnClickListener() {

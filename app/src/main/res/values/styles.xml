@@ -13,8 +13,10 @@
     </style>
 
     <style name="ToolbarTitle">
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">35sp</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">

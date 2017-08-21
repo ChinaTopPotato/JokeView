@@ -6,9 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:cardBackgroundColor="@color/colorPrimaryDark"
+    app:cardBackgroundColor="#501E90FF"
     app:cardCornerRadius="5dp"
     android:layout_margin="2dp"
+    android:foreground="?android:attr/selectableItemBackground"
     >
         <LinearLayout
             android:layout_width="match_parent"
