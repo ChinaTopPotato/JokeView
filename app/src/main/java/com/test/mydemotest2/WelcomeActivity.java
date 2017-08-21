@@ -27,7 +27,7 @@ public class WelcomeActivity extends BaseActivity {
                     String username = sp.getString("username", "");
                     boolean judge = false;
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

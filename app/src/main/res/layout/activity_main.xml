@@ -10,18 +10,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <TextView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:text="笑话大全"
-        android:textColor="#fff"
-        android:gravity="center"
-        android:textSize="30sp"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipe_refresh">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler_view"></android.support.v7.widget.RecyclerView>
+        android:id="@+id/recycler_view"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 
