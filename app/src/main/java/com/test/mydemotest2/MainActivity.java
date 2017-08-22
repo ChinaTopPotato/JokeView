@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Response;
 
 import static com.test.mydemotest2.R.style.ToolbarTitle;
@@ -42,7 +42,11 @@ public class MainActivity extends BaseActivity{
     private List<Joke>jokeList = new ArrayList<>();
     private TextView userText;
     private TextView ageText;
+    private RecyclerView recyclerView;
+    private JokeAdapter mAdapter;
+    private LinearLayoutManager layoutManager;
     private SwipeRefreshLayout swipeRefresh;
+
     protected User user;
     private static final int UPDATE = 1;
 
@@ -58,7 +62,6 @@ public class MainActivity extends BaseActivity{
         editor.putString("username",user.getAccount());
         editor.apply();
         super.onDestroy();
-        Log.d("MainActivity", "onDestroy: ");
     }
 
 
@@ -66,6 +69,8 @@ public class MainActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRecyclerView();
+        ActivityCollector.hidebar(MainActivity.this);
         NavigationView nav = (NavigationView)findViewById(R.id.nav_view);
         View header = nav.getHeaderView(0);
         userText = (TextView)header.findViewById(R.id.n_username);
@@ -117,28 +122,36 @@ public class MainActivity extends BaseActivity{
         }
     };
     private  void setRecyclerView(){
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
+        layoutManager = new LinearLayoutManager(this);
+        mAdapter = new JokeAdapter(jokeList);
+        recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        JokeAdapter mAdapter = new JokeAdapter(jokeList);
-        recyclerView.setAdapter(mAdapter);
+
     }
 
     private void sendRequestWithOkhttp( ){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder().url("http://api.laifudao.com/open/xiaohua.json").build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    Gson gson = new Gson();
-                    jokeList= gson.fromJson(responseData,new TypeToken<List<Joke>>(){}.getType());
-                    Message msg = new Message();
-                    msg.what = UPDATE;
-                    handler.sendMessage(msg);
+                try {HttpUtil.sendOkHttpRequest("http://api.laifudao.com/open/xiaohua.json", new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String responseData = response.body().string();
+                        Gson gson = new Gson();
+                        jokeList= gson.fromJson(responseData,new TypeToken<List<Joke>>(){}.getType());
+                        Message msg = new Message();
+                        msg.what = UPDATE;
+                        handler.sendMessage(msg);
+                    }
+                });
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -149,29 +162,43 @@ public class MainActivity extends BaseActivity{
     }
     private void refreshJokes(){
         new Thread(new Runnable() {
-            private int test = new Random().nextInt(1000);
+            private int random = new Random().nextInt(1000);
             @Override
             public void run() {
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder().url("http://apis.haoservice" +
-                            ".com/lifeservice/Joke/ContentList?pagesize=20&page="+test+"&key" +
-                            "=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX").build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    JSONArray jsonarray = new JSONObject(responseData).getJSONArray("result");
-                    String jokeInfo = jsonarray.toString();
-                    Gson gson = new Gson();
-                    jokeList = gson.fromJson(jokeInfo, new TypeToken<List<Joke>>() {
-                    }.getType());
+                    HttpUtil.sendOkHttpRequest("http://apis.haoservice" +
+                            ".com/lifeservice/Joke/ContentList?pagesize=20&page="+random+"&key" +
+                            "=57a9bdfd931f4c5d9da8cb0060c9969a", new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            e.printStackTrace();
+                        }
 
-                } catch (Exception e) {
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws
+                        IOException{
+                            JSONArray jsonarray;
+                            try {
+                                jsonarray = new JSONObject(response.body().string().replace("\r\n", "\n"))
+                                        .getJSONArray("result");
+                                String jokeInfo = jsonarray.toString();
+                                Gson gson = new Gson();
+                                jokeList = gson.fromJson(jokeInfo, new TypeToken<List<Joke>>() {
+                                }.getType());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         setRecyclerView();
+                        mAdapter.notifyDataSetChanged();
                         swipeRefresh.setRefreshing(false);
                     }
                 });

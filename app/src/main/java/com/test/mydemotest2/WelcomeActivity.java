@@ -1,5 +1,6 @@
 package com.test.mydemotest2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,7 @@ import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
-public class WelcomeActivity extends BaseActivity {
+public class WelcomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
