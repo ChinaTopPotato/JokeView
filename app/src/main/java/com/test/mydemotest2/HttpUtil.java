@@ -4,7 +4,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
- * Created by Administrator on 2017/8/21 0021.
+ * 利用外部库OkHttp进行网络数据的传输
  */
 
 public class HttpUtil {

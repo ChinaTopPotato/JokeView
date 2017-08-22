@@ -5,7 +5,7 @@ import org.litepal.crud.DataSupport;
 import java.io.Serializable;
 
 /**
- * Created by Administrator on 2017/8/15 0015.
+ * Joke类，进行笑话相关内容的存储，同时使用Serializable接口实现可以intent传输Joke类
  */
 
 public class Joke extends DataSupport implements Serializable {

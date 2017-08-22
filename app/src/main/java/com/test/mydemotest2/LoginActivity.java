@@ -13,6 +13,9 @@ import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
+/**
+ * 登录界面LoginActivity，主要内容是实现登录的相关功能，并且能够跳转到注册界面
+ */
 public class LoginActivity extends BaseActivity {
     private EditText accountEdit;
     private EditText passwordEdit;
@@ -20,17 +23,10 @@ public class LoginActivity extends BaseActivity {
     private Button register;
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        getSharedPreferences("account",MODE_PRIVATE).edit().clear().apply();
-        Log.d("LoginActivity", "onResume: ");
-    }
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSharedPreferences("account",MODE_PRIVATE).edit().clear().apply();//进入login界面时自动删除保存的账户信息
         accountEdit = (EditText)findViewById(R.id.account);
         passwordEdit = (EditText)findViewById(R.id.password);
         login = (Button)findViewById(R.id.login);

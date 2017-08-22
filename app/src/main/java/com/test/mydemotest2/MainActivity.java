@@ -1,8 +1,5 @@
 package com.test.mydemotest2;
 
-
-
-import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -35,8 +31,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.test.mydemotest2.R.style.ToolbarTitle;
-
+/**
+ * MainActivity主要是对于从API接受的笑话标题进行展示，并且提供注销账号与退出软件的功能。
+ */
 
 public class MainActivity extends BaseActivity{
     private List<Joke>jokeList = new ArrayList<>();
@@ -58,7 +55,7 @@ public class MainActivity extends BaseActivity{
 
     @Override
     protected void onDestroy() {
-        SharedPreferences.Editor editor = getSharedPreferences("account",MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences("account",MODE_PRIVATE).edit();//退出时保存相关账户信息
         editor.putString("username",user.getAccount());
         editor.apply();
         super.onDestroy();
@@ -77,7 +74,7 @@ public class MainActivity extends BaseActivity{
         ageText = (TextView)header.findViewById(R.id.n_age);
         Toolbar toolbar  = (Toolbar)findViewById(R.id.toolbar) ;
         setSupportActionBar(toolbar);
-        toolbar.setTitleTextAppearance(this,ToolbarTitle);
+        toolbar.setTitleTextAppearance(this,R.style.ToolbarTitle);
         sendRequestWithOkhttp();
         Intent intent = getIntent();
         user = (User)intent.getSerializableExtra("userinfo");
@@ -94,20 +91,21 @@ public class MainActivity extends BaseActivity{
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()){
-                case R.id.nav_logout:
-                    finish();
-                    Intent intent =new Intent(MainActivity.this,LoginActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.nav_quit:
-                    ActivityCollector.finishAll();
-                    break;
-            }
-            return true;
+                switch (item.getItemId()){
+                    case R.id.nav_logout:
+                        finish();
+                        Intent intent =new Intent(MainActivity.this,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case R.id.nav_quit:
+                        ActivityCollector.finishAll();
+                        break;
+                }
+                return true;
             }
         });
-        }
+    }
 
     private Handler handler = new Handler(){
         @Override
@@ -129,7 +127,7 @@ public class MainActivity extends BaseActivity{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-    }
+    }//设置RecyclerView
 
     private void sendRequestWithOkhttp( ){
         new Thread(new Runnable() {
@@ -159,36 +157,36 @@ public class MainActivity extends BaseActivity{
 
         }).start();
 
-    }
+    }//请求笑话的方法
     private void refreshJokes(){
         new Thread(new Runnable() {
             private int random = new Random().nextInt(1000);
             @Override
             public void run() {
-                    HttpUtil.sendOkHttpRequest("http://apis.haoservice" +
-                            ".com/lifeservice/Joke/ContentList?pagesize=20&page="+random+"&key" +
-                            "=57a9bdfd931f4c5d9da8cb0060c9969a", new Callback() {
-                        @Override
-                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                HttpUtil.sendOkHttpRequest("http://apis.haoservice" +
+                        ".com/lifeservice/Joke/ContentList?pagesize=20&page="+random+"&key" +
+                        "=57a9bdfd931f4c5d9da8cb0060c9969a", new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws
+                            IOException{
+                        JSONArray jsonarray;
+                        try {
+                            jsonarray = new JSONObject(response.body().string().replace("\r\n", "\n"))
+                                    .getJSONArray("result");
+                            String jokeInfo = jsonarray.toString();
+                            Gson gson = new Gson();
+                            jokeList = gson.fromJson(jokeInfo, new TypeToken<List<Joke>>() {
+                            }.getType());
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-                        @Override
-                        public void onResponse(@NonNull Call call, @NonNull Response response) throws
-                        IOException{
-                            JSONArray jsonarray;
-                            try {
-                                jsonarray = new JSONObject(response.body().string().replace("\r\n", "\n"))
-                                        .getJSONArray("result");
-                                String jokeInfo = jsonarray.toString();
-                                Gson gson = new Gson();
-                                jokeList = gson.fromJson(jokeInfo, new TypeToken<List<Joke>>() {
-                                }.getType());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    }
+                });
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -204,7 +202,8 @@ public class MainActivity extends BaseActivity{
                 });
             }
         }).start();
-    }
+    }//刷新笑话目录的方法
 
 
 }
+

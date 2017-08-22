@@ -19,6 +19,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+/**
+ * JokeActivity是笑话内容的展示界面,主要实现了一个动态加载的背景图片,api接口来自《第一行代码》中的加载每日bing的背景图片。
+ */
 public class JokeActivity extends BaseActivity {
     private TextView jokeContent;
     private Toolbar jokeTitle;
@@ -47,6 +50,10 @@ public class JokeActivity extends BaseActivity {
             loadBingPic();
         }
     }
+
+    /**
+     *loadBingPic方法，主要是实现了动态载入bing背景图的功能
+     */
     private void  loadBingPic(){
     String requestBingPic = "http://guolin.tech/api/bing_pic";
         HttpUtil.sendOkHttpRequest(requestBingPic, new Callback()  {

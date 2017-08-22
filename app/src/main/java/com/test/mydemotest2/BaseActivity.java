@@ -13,7 +13,7 @@ import org.litepal.LitePalApplication;
 
 
 /**
- * Created by Administrator on 2017/8/17 0017.
+ * 与ActivityCollector配合使用使得可以对所有Activity进行一些操作
  */
 
 
